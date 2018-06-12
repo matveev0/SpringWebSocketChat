@@ -90,6 +90,10 @@ function onMessageReceived(payload) {
     } else {
         messageElement.classList.add('chat-message');
 
+        var date = formatAMPM(new Date());
+        console.log('Date ' + date);
+        var dateText = document.createTextNode(date);
+
         var avatarElement = document.createElement('i');
         var avatarText = document.createTextNode(message.sender[0]);
         avatarElement.appendChild(avatarText);
@@ -98,7 +102,8 @@ function onMessageReceived(payload) {
         messageElement.appendChild(avatarElement);
 
         var usernameElement = document.createElement('span');
-        var usernameText = document.createTextNode(message.sender);
+        var usernameText = document.createTextNode(message.sender+'   ' + date);
+
         usernameElement.appendChild(usernameText);
         messageElement.appendChild(usernameElement);
     }
@@ -120,6 +125,17 @@ function getAvatarColor(messageSender) {
     }
     var index = Math.abs(hash % colors.length);
     return colors[index];
+}
+
+function formatAMPM(date) {
+    var hours = date.getHours();
+    var minutes = date.getMinutes();
+    var ampm = hours >= 12 ? 'PM' : 'AM';
+    hours = hours % 12;
+    hours = hours ? hours : 12; // the hour '0' should be '12'
+    minutes = minutes < 10 ? '0'+minutes : minutes;
+    var strTime = hours + ':' + minutes + ' ' + ampm;
+    return strTime;
 }
 
 usernameForm.addEventListener('submit', connect, true);
